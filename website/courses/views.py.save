@@ -1,0 +1,42 @@
+
+
+import json
+from django.shortcuts import render
+from courses.models import Course
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView, UpdateView
+# Create your views here.
+from django.http import HttpResponse
+
+def index(request):
+    return HttpResponse("Hello World!")
+
+def get_course(request, id):
+    course = Course.objects.filter(id=id)
+    if(len(course) == 1):
+        return HttpResponse("Course %(id)s is at row %(row)s and col %(col)s" %{'id':course[0].tag, 'row':str(course[0].row), 'col':str(course[0].col)})
+    else:
+        return HttpsResponse("No such Course") 
+
+
+class CreateCourse(CreateView):
+    model = Course
+    fields = '__all__'
+    success_url = reverse_lazy('courses')
+
+class UpdateCourse(UpdateView):
+    model = Course
+    fields = ['row', 'col']
+    sucess_url = reverse_lazy('courses')
+
+class CourseEncoder(json.JSONEncoder):
+    def default(self,obj):
+        if isinstance(obj, Course):
+            return{'id' : obj.id, 'tag' : obj.tag, 'row' : obj.row, 'col' : obj.col}
+        return json.JSONEncoder.default(self. obj)
+
+
+def get_all_courses(request):
+    course_list={}
+    for course in request:
+        course_list.append(request[course]) 

@@ -73,6 +73,7 @@ WSGI_APPLICATION = 'website.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+SITE_READ_ONLY = False
 
 DATABASES = {
     'default': {
